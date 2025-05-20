@@ -120,6 +120,15 @@
   document.getElementById('introPopup').classList.add('show');  // force show
   updateConnectorLines();
 });
+
+document.addEventListener("click", (event) => {
+      const popup = document.getElementById("introPopup");
+      const popupBox = document.querySelector(".popup-box");
+
+      if (popup.classList.contains("show") && !popupBox.contains(event.target)) {
+        popup.classList.remove("show");
+      }
+    });
   </script>
 </body>
 </html>

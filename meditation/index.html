@@ -28,7 +28,7 @@
     let h = canvas.height;
     let frame = 0;
 
-    const fixedCenter = { x: w / 2, y: h / 2 }; // fixed point particles move toward
+    const fixedCenter = { x: w / 2, y: h / 2 }; 
 
     let center = { x: w / 2, y: h / 2 };
     let target = { x: w / 2, y: h / 2 };
@@ -61,9 +61,9 @@
     const dx = fixedCenter.x - this.x;
     const dy = fixedCenter.y - this.y;
   const dist = Math.hypot(dx, dy);
-  const step = 1 + Math.random();  // range: 1–2
+  const step = 1 + Math.random(); 
 
-  const chaos = 1.5; // Always on
+  const chaos = 1.5; 
   this.x += (dx / dist) * step + (Math.random() - 0.5) * chaos;
   this.y += (dy / dist) * step + (Math.random() - 0.5) * chaos;
 }
@@ -85,11 +85,11 @@
     function animate() {
       ctx.clearRect(0, 0, w, h);
 
-      // Smoothly follow mouse
+    
       center.x += (target.x - center.x) * 0.02;
       center.y += (target.y - center.y) * 0.02;
 
-      // Yellow orb
+    
       const orbRadius = Math.min(w, h) * 0.3;
       const shimmer = Math.sin(frame * 0.05) * 2;
       const gradient = ctx.createRadialGradient(
@@ -104,7 +104,7 @@
       ctx.arc(center.x, center.y, orbRadius + shimmer, 0, Math.PI * 2);
       ctx.fill();
 
-      // Update particles with size control inside orb
+
       
       particles.forEach(p => {
   const dx = fixedCenter.x - p.x;

@@ -57,15 +57,15 @@
             this.expansionStartFrame = frame;
           }
         } else {
-          const expansionProgress = (frame - this.expansionStartFrame) / 200; // Slow expansion over 200 frames
-          const maxExpansionRadius = Math.min(w, h) * 0.8; // Stop expansion at 80% of the screen size
+          const expansionProgress = (frame - this.expansionStartFrame) / 200; 
+          const maxExpansionRadius = Math.min(w, h) * 0.8; 
           const expansionRadius = Math.min(maxExpansionRadius, Math.min(w, h) * expansionProgress);
 
           const angle = Math.random() * Math.PI * 2;
           const radius = Math.random() * expansionRadius;
           this.x = pointer.x + Math.cos(angle) * radius;
           this.y = pointer.y + Math.sin(angle) * radius;
-          this.size = 3 + Math.random() * 2; // Thicker and more dense particles
+          this.size = 3 + Math.random() * 2; 
         }
       }
       draw() {

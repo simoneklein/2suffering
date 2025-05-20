@@ -49,8 +49,9 @@
         this.y = Math.random() * h;
         this.size = Math.random() * 4 + 1;
         this.opacity = 0.3 + Math.random() * 0.5;
-        this.color = "rgba(87, 255, 132,"; // green theme
-      }
+        this.color = "rgba(87, 255, 132,"; 
+
+        
       update() {
         const dx = pointer.x - this.x;
         const dy = pointer.y - this.y;
@@ -63,11 +64,11 @@
           this.y -= Math.sin(angle) * force;
         }
 
-        // Add continuous movement to prevent standing still
+        
         this.x += (Math.random() - 0.5) * 2;
         this.y += (Math.random() - 0.5) * 2;
 
-        // Wrap around screen
+   
         if (this.x < 0) this.x = w;
         if (this.x > w) this.x = 0;
         if (this.y < 0) this.y = h;
