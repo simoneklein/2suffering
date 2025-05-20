@@ -86,11 +86,15 @@
     }
 
     let flashing = false;
+    let stillTimeout;
 
-    setInterval(() => {
-      const moving = Math.hypot(pointer.vx, pointer.vy) > 1;
-      flashing = !moving;
-    }, 500);
+    document.addEventListener("mousemove", () => {
+      flashing = false;
+      clearTimeout(stillTimeout);
+      stillTimeout = setTimeout(() => {
+        flashing = true;
+      }, 600);
+    });
 
     function animate() {
       ctx.clearRect(0, 0, w, h);
