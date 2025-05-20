@@ -69,18 +69,14 @@
     }
 
 
-      function toggleInfo() {
-  const popup = document.getElementById('introPopup');
-  const toggleSwitch = document.querySelector('.toggle-switch');
-
-  if (popup.classList.contains('show')) {
-    popup.classList.remove('show');
-    toggleSwitch.classList.remove('active');
-  } else {
-    popup.classList.add('show');
-    toggleSwitch.classList.add('active');
-  }
-}
+    function toggleInfo() {
+      const popup = document.getElementById('introPopup');
+      if (popup.classList.contains('show')) {
+        popup.classList.remove('show');
+      } else {
+        popup.classList.add('show');
+      }
+    }
 
     function updateConnectorLines() {
       const svg = document.getElementById("connectorSVG");
@@ -124,9 +120,22 @@
 document.addEventListener("click", (event) => {
       const popup = document.getElementById("introPopup");
       const popupBox = document.querySelector(".popup-box");
+      const toggleButton = document.querySelector(".toggle-button");
 
-      if (popup.classList.contains("show") && !popupBox.contains(event.target)) {
+      if (
+        popup.classList.contains("show") &&
+        !popupBox.contains(event.target) &&
+        event.target !== toggleButton
+      ) {
         popup.classList.remove("show");
+      }
+    });
+
+    document.querySelector(".toggle-button").addEventListener("click", (event) => {
+      event.stopPropagation(); // Prevent the click from propagating to the document listener
+      const popup = document.getElementById("introPopup");
+      if (!popup.classList.contains("show")) {
+        popup.classList.add("show");
       }
     });
   </script>
