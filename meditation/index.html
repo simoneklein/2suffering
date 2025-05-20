@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meditation - Integrated Suffering</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <button id="backButton" class="back-button" onclick="goHome()">Home</button>
+  <canvas id="meditationCanvas"></canvas>
+
+  <div id="infoBox">
+    <p id="infoText">Meditation: A practice of integration. The three poisons—attachment, aversion, and ignorance—gather here to be seen, softened, and released.</p>
+  </div>
+
+  <div class="toggle-switch" onclick="toggleInfo()">
+    <div class="toggle-knob"></div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("meditationCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let w = canvas.width;
+    let h = canvas.height;
+    let frame = 0;
+
+    const fixedCenter = { x: w / 2, y: h / 2 }; // fixed point particles move toward
+
+    let center = { x: w / 2, y: h / 2 };
+    let target = { x: w / 2, y: h / 2 };
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      w = canvas.width;
+      h = canvas.height;
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      target.x = e.clientX;
+      target.y = e.clientY;
+    });
+
+    class Particle {
+  constructor(color) {
+    const angle = Math.random() * 2 * Math.PI;
+    const radius = Math.max(w, h) * (0.3 + Math.random() * 0.4);
+    this.x = center.x + Math.cos(angle) * radius;
+    this.y = center.y + Math.sin(angle) * radius;
+    this.size = Math.random() * 3 + 1;
+    this.minSize = 2.5;
+    this.opacity = 0.6;
+    this.color = color;
+  }
+
+  update() {
+    const dx = fixedCenter.x - this.x;
+    const dy = fixedCenter.y - this.y;
+  const dist = Math.hypot(dx, dy);
+  const step = 1 + Math.random();  // range: 1–2
+
+  const chaos = 1.5; // Always on
+  this.x += (dx / dist) * step + (Math.random() - 0.5) * chaos;
+  this.y += (dy / dist) * step + (Math.random() - 0.5) * chaos;
+}
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    const particles = [];
+    const colors = ["rgba(255,87,87,0.6)", "rgba(87,255,132,0.6)", "rgba(87,180,255,0.6)"];
+    for (let i = 0; i < 150; i++) {
+      particles.push(new Particle(colors[i % 3]));
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+
+      // Smoothly follow mouse
+      center.x += (target.x - center.x) * 0.02;
+      center.y += (target.y - center.y) * 0.02;
+
+      // Yellow orb
+      const orbRadius = Math.min(w, h) * 0.3;
+      const shimmer = Math.sin(frame * 0.05) * 2;
+      const gradient = ctx.createRadialGradient(
+        center.x, center.y, orbRadius * 0.4 + shimmer,
+        center.x, center.y, orbRadius + shimmer
+      );
+      gradient.addColorStop(0, 'rgba(255, 223, 0, 0)');
+      gradient.addColorStop(1, 'rgba(255, 223, 0, 0.8)');
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, orbRadius + shimmer, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Update particles with size control inside orb
+      
+      particles.forEach(p => {
+  const dx = fixedCenter.x - p.x;
+  const dy = fixedCenter.y - p.y;
+  const dist = Math.hypot(dx, dy);
+  const chaos = 1.5;
+
+  if (dist > orbRadius * 0.9) {
+    // Outside the orb — move inward with some chaos
+    const step = 1 + Math.random();
+    p.x += (dx / dist) * step + (Math.random() - 0.5) * chaos;
+    p.y += (dy / dist) * step + (Math.random() - 0.5) * chaos;
+  } else {
+    // Inside the orb — float gently
+    p.x += (Math.random() - 0.5) * 1;
+    p.y += (Math.random() - 0.5) * 1;
+  }
+
+  if (p.size < p.minSize) p.size = p.minSize;
+
+  p.draw();
+});
+
+
+
+      frame++;
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    function goHome() {
+      window.location.href = "../index.html";
+    }
+
+    function toggleInfo() {
+      const infoBox = document.getElementById('infoBox');
+      const toggleSwitch = document.querySelector('.toggle-switch');
+      if (infoBox.style.display === 'none') {
+        infoBox.style.display = 'block';
+        toggleSwitch.classList.add('active');
+      } else {
+        infoBox.style.display = 'none';
+        toggleSwitch.classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>

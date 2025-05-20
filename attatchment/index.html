@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attachment</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <button id="backButton" class="back-button" onclick="goHome()">Home</button>
+  <canvas id="attachmentCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById("attachmentCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let w = canvas.width;
+    let h = canvas.height;
+    const pointer = { x: w / 2, y: h / 2 };
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      w = canvas.width;
+      h = canvas.height;
+    });
+
+    document.addEventListener("mousemove", e => {
+      pointer.x = e.clientX;
+      pointer.y = e.clientY;
+    });
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.size = Math.random() * 4 + 1;
+        this.opacity = 0.2 + Math.random() * 0.5;
+        this.color = "rgba(255, 87, 87,"; // red theme
+        this.expanding = false;
+        this.expansionStartFrame = 0;
+      }
+      update(frame) {
+        if (!this.expanding) {
+          const dx = pointer.x - this.x;
+          const dy = pointer.y - this.y;
+          const randomFactorX = 0.01 + Math.random() * 0.02; // Increased randomness for X
+          const randomFactorY = 0.01 + Math.random() * 0.02; // Increased randomness for Y
+          this.x += dx * randomFactorX + (Math.random() - 0.5);
+          this.y += dy * randomFactorY + (Math.random() - 0.5);
+
+          const distanceToCursor = Math.hypot(pointer.x - this.x, pointer.y - this.y);
+          if (distanceToCursor < 30) {
+            this.expanding = true;
+            this.expansionStartFrame = frame;
+          }
+        } else {
+          const expansionProgress = (frame - this.expansionStartFrame) / 200; // Slow expansion over 200 frames
+          const maxExpansionRadius = Math.min(w, h) * 0.8; // Stop expansion at 80% of the screen size
+          const expansionRadius = Math.min(maxExpansionRadius, Math.min(w, h) * expansionProgress);
+
+          const angle = Math.random() * Math.PI * 2;
+          const radius = Math.random() * expansionRadius;
+          this.x = pointer.x + Math.cos(angle) * radius;
+          this.y = pointer.y + Math.sin(angle) * radius;
+          this.size = 3 + Math.random() * 2; // Thicker and more dense particles
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `${this.color} ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+
+    const particles = [];
+    for (let i = 0; i < 150; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate(frame = 0) {
+      ctx.clearRect(0, 0, w, h);
+      particles.forEach(p => {
+        p.update(frame);
+        p.draw();
+      });
+      requestAnimationFrame(() => animate(frame + 1));
+    }
+
+    animate();
+
+
+
+    function goHome() {
+      window.location.href = "../index.html";
+    }
+  </script>
+
+<div id="infoBox" style="position: fixed; font-family: 'Font'; bottom: 1rem; right: 1rem; color: rgb(232, 103, 103); padding: 1rem; border-radius: 5px; display: none;">
+    <p id="infoText">Attachment (rāga): A clinging or grasping toward pleasurable experiences or objects. It leads to suffering when we fear their loss or crave their return.</p>
+  </div>
+  
+  <div class="toggle-switch" onclick="toggleInfo()">
+    <div class="toggle-knob"></div>
+  </div>
+  
+  <script>
+    function toggleInfo() {
+      const infoBox = document.getElementById('infoBox');
+      const toggleSwitch = document.querySelector('.toggle-switch');
+      if (infoBox.style.display === 'none') {
+        infoBox.style.display = 'block';
+        toggleSwitch.classList.add('active');
+      } else {
+        infoBox.style.display = 'none';
+        toggleSwitch.classList.remove('active');
+      }
+    }
+  </script>
+  
+</body>
+</html>

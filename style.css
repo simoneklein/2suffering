@@ -1,0 +1,236 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  @font-face {
+    font-family: "Font";
+    src: url("assets/Nunito-VariableFont_wght.ttf");
+  }
+  
+  @font-face {
+    font-family: 'Nunito';
+    src: url('./assets/Nunito-VariableFont_wght.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #453f3f;
+    overflow: hidden;
+    font-family: "Font", 'Nunito', sans-serif; /* Apply Nunito globally */
+    color: white;
+  }
+  
+  .home-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    position: relative;
+    padding: 2rem;
+    z-index: 1;
+  }
+  
+  .top-row, .bottom-row {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+  
+  .circle-button,
+  .meditation-button {
+    width: clamp(100px, 22vw, 400px);
+    height: clamp(100px, 22vw, 400px);
+    border-radius: 50%;
+    background: none;
+    border: 2px solid white;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s, transform 0.2s;
+  }
+  
+
+  .meditation-button:hover {
+    background: rgb(233, 222, 152);
+    color: #0d0d0d;
+    transform: scale(1.05);
+  }
+  
+
+  .attachment:hover {
+    background: rgb(232, 103, 103);
+    color: #0d0d0d;
+  }
+  
+  .aversion:hover {
+    background: rgb(108, 143, 116);
+    color: #0d0d0d;
+  }
+  
+  .ignorance:hover {
+    background: rgb(87, 180, 255);
+    color: #0d0d0d;
+  }
+  
+  .meditation-button:hover {
+    background: rgb(233, 222, 152);
+    color: #0d0d0d;
+  }
+  
+  .attachment { border-color: rgb(232, 103, 103); }
+  .aversion { border-color: rgb(108, 143, 116); }
+  .ignorance { border-color: rgb(87, 180, 255); }
+  .meditation-button { border-color: rgb(233, 222, 152); }
+  
+  .circle-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .circle-label text {
+    fill: white;
+    font-size: 10px;
+    font-family: "Font";
+    letter-spacing: 1px;
+    dominant-baseline: middle;
+  }
+  
+  .circle-label textPath {
+    text-anchor: middle;
+  }
+  
+  .meditation-button .dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 3px;
+    z-index: 2;
+  }
+  
+  .meditation-button .green { background-color: rgb(108, 143, 116); }
+  .meditation-button .blue { background-color: rgb(87, 180, 255); }
+  .meditation-button .red { background-color: rgb(232, 103, 103); }
+  
+  .curved-connector {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  .curved-connector path {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.3);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 6 4;
+    animation: pulseLine 2s infinite;
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
+  }
+  
+  
+  /* Disable toggle when popup is active */
+  .popup-overlay.show ~ .toggle-switch {
+    pointer-events: none;
+    opacity: 0.3;
+    cursor: default;
+  }
+  
+  .toggle-button {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    width: 40px;
+    height: 40px;
+    background: #6e6565;
+    color: #0d0d0d;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    transition: background 0.3s ease;
+  }
+  
+  .toggle-button:hover {
+    background: white;
+  }
+  
+  
+ 
+
+  .popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  opacity: 0;
+  transform: scale(0.99);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  pointer-events: none;
+}
+
+.popup-overlay.show {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: all;
+}
+
+.popup-box {
+  background: #453f3f;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 600px;
+  color: white;
+  text-align: center;
+  position: relative;
+}
+
+.close-popup {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}

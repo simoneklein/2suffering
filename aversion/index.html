@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aversion</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <button id="backButton" class="back-button" onclick="goHome()">Home</button>
+  <canvas id="aversionCanvas"></canvas>
+
+  <div id="infoBox" style="position: fixed; font-family: 'Font'; bottom: 1rem; right: 1rem; color: rgb(108, 143, 116); padding: 1rem; border-radius: 5px; display: none;">
+    <p id="infoText">Aversion (dveṣa): A pushing away of discomfort, pain, or anything unpleasant. It leads to suffering by reinforcing resistance, fear, and reactive patterns.</p>
+  </div>
+
+  <div class="toggle-switch" onclick="toggleInfo()">
+    <div class="toggle-knob"></div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("aversionCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let w = canvas.width;
+    let h = canvas.height;
+    const pointer = { x: w / 2, y: h / 2 };
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      w = canvas.width;
+      h = canvas.height;
+    });
+
+    document.addEventListener("mousemove", e => {
+      pointer.x = e.clientX;
+      pointer.y = e.clientY;
+    });
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.size = Math.random() * 4 + 1;
+        this.opacity = 0.3 + Math.random() * 0.5;
+        this.color = "rgba(87, 255, 132,"; // green theme
+      }
+      update() {
+        const dx = pointer.x - this.x;
+        const dy = pointer.y - this.y;
+        const distance = Math.hypot(dx, dy);
+
+        if (distance < 200) {
+          const angle = Math.atan2(dy, dx);
+          const force = (200 - distance) * 0.1;
+          this.x -= Math.cos(angle) * force;
+          this.y -= Math.sin(angle) * force;
+
+          // Add bounce-like randomness
+          this.x += (Math.random() - 0.5) * 2;
+          this.y += (Math.random() - 0.5) * 2;
+        } else {
+          this.x += (Math.random() - 0.5) * 0.5;
+          this.y += (Math.random() - 0.5) * 0.5;
+        }
+
+        // Wrap around screen
+        if (this.x < 0) this.x = w;
+        if (this.x > w) this.x = 0;
+        if (this.y < 0) this.y = h;
+        if (this.y > h) this.y = 0;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `${this.color} ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+
+    const particles = [];
+    for (let i = 0; i < 150; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    function goHome() {
+      window.location.href = "../index.html";
+    }
+
+    function toggleInfo() {
+      const infoBox = document.getElementById('infoBox');
+      const toggleSwitch = document.querySelector('.toggle-switch');
+      if (infoBox.style.display === 'none') {
+        infoBox.style.display = 'block';
+        toggleSwitch.classList.add('active');
+      } else {
+        infoBox.style.display = 'none';
+        toggleSwitch.classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>

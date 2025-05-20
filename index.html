@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suffering Visualization</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="popup-overlay" id="introPopup">
+    <div class="popup-box">
+      <button class="close-popup" onclick="closePopup()">&times;</button>
+      <p>
+        <strong>Visualizing the Causes of Suffering and the Role of Meditation</strong><br><br>
+        In Buddhist thought, suffering (<em>dukkha</em>) arises from three core patterns: attachment (<em>rāga</em>), aversion (<em>dveṣa</em>), and ignorance (<em>avidyā</em>). Meditation helps us relate to the causes of suffering by creating space and loosening their hold.<br><br>
+         These animations are meant to embody what these experiences feel like.
+      </p>
+    </div>
+  </div>
+
+  <div class="home-screen">
+    <div class="buttons">
+      <div class="top-row">
+        <a href="attatchment/index.html" class="circle-button attachment">
+          <svg viewBox="0 0 100 100" class="circle-label">
+            <defs><path id="path-attachment" d="M50,50 m-35,0 a35,35 0 1,1 70,0 a35,35 0 1,1 -70,0" /></defs>
+            <text><textPath href="#path-attachment" startOffset="20%">ATTACHMENT</textPath></text>
+          </svg>
+        </a>
+        <a href="aversion/index.html" class="circle-button aversion">
+          <svg viewBox="0 0 100 100" class="circle-label">
+            <defs><path id="path-aversion" d="M50,50 m-35,0 a35,35 0 1,1 70,0 a35,35 0 1,1 -70,0" /></defs>
+            <text><textPath href="#path-aversion" startOffset="20%">AVERSION</textPath></text>
+          </svg>
+        </a>
+        <a href="ignorance/index.html" class="circle-button ignorance">
+          <svg viewBox="0 0 100 100" class="circle-label">
+            <defs><path id="path-ignorance" d="M50,50 m-35,0 a35,35 0 1,1 70,0 a35,35 0 1,1 -70,0" /></defs>
+            <text><textPath href="#path-ignorance" startOffset="20%">IGNORANCE</textPath></text>
+          </svg>
+        </a>
+      </div>
+      <div class="bottom-row">
+        <a href="meditation/index.html" class="meditation-button">
+          <svg viewBox="0 0 100 100" class="circle-label">
+            <defs><path id="path-meditation" d="M50,50 m-35,0 a35,35 0 1,1 70,0 a35,35 0 1,1 -70,0" /></defs>
+            <text><textPath href="#path-meditation" startOffset="20%">MEDITATION</textPath></text>
+          </svg>
+          <span class="dot red"></span>
+          <span class="dot green"></span>
+          <span class="dot blue"></span>
+        </a>
+      </div>
+      <svg class="curved-connector" id="connectorSVG">
+        <path id="line-attachment" d="" />
+        <path id="line-aversion" d="" />
+        <path id="line-ignorance" d="" />
+      </svg>
+    </div>
+  </div>
+
+  <div class="toggle-button" onclick="toggleInfo()">?</div>
+
+
+
+  <script>
+    function closePopup() {
+      document.getElementById('introPopup').classList.remove('show');
+    }
+
+
+      function toggleInfo() {
+  const popup = document.getElementById('introPopup');
+  const toggleSwitch = document.querySelector('.toggle-switch');
+
+  if (popup.classList.contains('show')) {
+    popup.classList.remove('show');
+    toggleSwitch.classList.remove('active');
+  } else {
+    popup.classList.add('show');
+    toggleSwitch.classList.add('active');
+  }
+}
+
+    function updateConnectorLines() {
+      const svg = document.getElementById("connectorSVG");
+      const attachmentBtn = document.querySelector(".attachment");
+      const aversionBtn = document.querySelector(".aversion");
+      const ignoranceBtn = document.querySelector(".ignorance");
+      const meditationBtn = document.querySelector(".meditation-button");
+
+      const svgRect = svg.getBoundingClientRect();
+      svg.setAttribute("viewBox", `0 0 ${svgRect.width} ${svgRect.height}`);
+
+      const centerOf = (el) => {
+        const rect = el.getBoundingClientRect();
+        return {
+          x: rect.left + rect.width / 2 - svgRect.left,
+          y: rect.top + rect.height - svgRect.top
+        };
+      };
+
+      const meditationCenter = meditationBtn.getBoundingClientRect();
+      const meditationTarget = {
+        x: meditationCenter.left + meditationCenter.width / 2 - svgRect.left,
+        y: meditationCenter.top - svgRect.top
+      };
+
+      function makePath(from, to) {
+        const controlY = (from.y + to.y) / 2;
+        return `M ${from.x} ${from.y} C ${from.x} ${controlY}, ${to.x} ${controlY}, ${to.x} ${to.y}`;
+      }
+
+      document.getElementById("line-attachment").setAttribute("d", makePath(centerOf(attachmentBtn), meditationTarget));
+      document.getElementById("line-aversion").setAttribute("d", makePath(centerOf(aversionBtn), meditationTarget));
+      document.getElementById("line-ignorance").setAttribute("d", makePath(centerOf(ignoranceBtn), meditationTarget));
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById('introPopup').classList.add('show');  // force show
+  updateConnectorLines();
+});
+  </script>
+</body>
+</html>
